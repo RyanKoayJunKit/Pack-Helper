@@ -8,11 +8,12 @@ public class HelperAIControls : MonoBehaviour
     [SerializeField]private GameObject m_PlayerChar;
     [SerializeField]private GameObject m_AIChar;
     [SerializeField]private float m_TurnSpeed = 0.1f;
+    private bool m_inUse;
 
     [Header("Controls")]
-    [SerializeField] private KeyCode GoLeft;
-    [SerializeField] private KeyCode GoBack;
-    [SerializeField] private KeyCode GoRight;
+    [SerializeField] private KeyCode m_GoLeft;
+    [SerializeField] private KeyCode m_GoBack;
+    [SerializeField] private KeyCode m_GoRight;
 
     private void Awake()
     {
@@ -28,15 +29,15 @@ public class HelperAIControls : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKeyDown(GoLeft))
+        if(Input.GetKeyDown(m_GoLeft))
         {
             LookLeft();
         }
-        if (Input.GetKeyDown(GoBack))
+        if (Input.GetKeyDown(m_GoBack))
         {
             LookRight();
         }
-        if (Input.GetKeyDown(GoRight))
+        if (Input.GetKeyDown(m_GoRight))
         {
             LookBehind();
         }
@@ -57,16 +58,25 @@ public class HelperAIControls : MonoBehaviour
 
     private IEnumerator SlowTurn(Vector3 OriginRot, float TargetVal)
     {
-        float timer = 0.0f;
-
-        Vector3 TargetRot = new Vector3(0.0f, TargetVal, 0.0f);
-
-        while (timer < 1.0f)
+        if (!m_inUse)
         {
-            Debug.Log("Slow Turn");
-            m_AIChar.transform.eulerAngles = Vector3.Lerp(OriginRot, TargetRot, timer);
-            yield return new WaitForEndOfFrame();
-            timer += m_TurnSpeed;
+            m_inUse = true;
+            float timer = 0.0f;
+
+            Vector3 TargetRot = new Vector3(0.0f, TargetVal, 0.0f);
+
+            while (timer < 1.0f)
+            {
+                Debug.Log("Slow Turn");
+                m_AIChar.transform.localEulerAngles = Vector3.Lerp(OriginRot, TargetRot, timer);
+                yield return new WaitForEndOfFrame();
+                timer += m_TurnSpeed;
+            }
+            m_inUse = false;
+        }
+        else
+        {
+            yield return null;
         }
     }
 }
