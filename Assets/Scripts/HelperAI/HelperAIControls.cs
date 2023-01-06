@@ -9,6 +9,11 @@ public class HelperAIControls : MonoBehaviour
     [SerializeField]private GameObject m_AIChar;
     [SerializeField]private float m_TurnSpeed = 0.1f;
 
+    [Header("Controls")]
+    [SerializeField] private KeyCode GoLeft;
+    [SerializeField] private KeyCode GoBack;
+    [SerializeField] private KeyCode GoRight;
+
     private void Awake()
     {
         if (m_Instance == null && m_Instance != this)
@@ -23,15 +28,15 @@ public class HelperAIControls : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.LeftArrow))
+        if(Input.GetKeyDown(GoLeft))
         {
             LookLeft();
         }
-        if (Input.GetKeyDown(KeyCode.RightArrow))
+        if (Input.GetKeyDown(GoBack))
         {
             LookRight();
         }
-        if (Input.GetKeyDown(KeyCode.DownArrow))
+        if (Input.GetKeyDown(GoRight))
         {
             LookBehind();
         }
